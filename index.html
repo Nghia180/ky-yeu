@@ -1,183 +1,388 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ký Ức Thanh Xuân</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Mời Kỷ Yếu - Lương Đại Nghĩa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;700&display=swap');
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  transition:background 1.2s ease;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-canvas{position:absolute;inset:0;z-index:0}
+        body {
+            background: radial-gradient(circle at center, #1a0b2e, #000000);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            perspective: 1000px;
+        }
 
-.card{
-  z-index:2;
-  width:90%;
-  max-width:420px;
-  padding:40px 26px;
-  text-align:center;
-  border-radius:22px;
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(14px);
-  box-shadow:0 0 40px rgba(255,255,255,.35);
-  animation:float 5s ease-in-out infinite;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
+        /* Hiệu ứng nền sao */
+        #stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-h1{font-size:28px;margin-bottom:14px;text-shadow:0 0 16px #fff}
-p{opacity:.9;line-height:1.6}
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle infinite alternate;
+        }
 
-button{
-  margin-top:22px;
-  border:none;
-  padding:14px 32px;
-  font-size:17px;
-  font-weight:700;
-  border-radius:40px;
-  cursor:pointer;
-  color:#fff;
-  background:linear-gradient(135deg,#ffdd00,#ff0080,#00e5ff);
-  background-size:300% 300%;
-  animation:glow 3s infinite alternate;
-  box-shadow:0 0 22px rgba(255,255,255,.8);
-}
-@keyframes glow{
-  0%{background-position:0%}
-  100%{background-position:100%}
-}
+        @keyframes twinkle {
+            from { opacity: 0.2; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
 
-.flash{
-  position:absolute;
-  inset:0;
-  background:white;
-  opacity:0;
-  pointer-events:none;
-  z-index:5;
-}
-.flash.show{
-  animation:flash .5s ease;
-}
-@keyframes flash{
-  0%{opacity:.8}
-  100%{opacity:0}
-}
-</style>
+        /* Container chính */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        /* Tấm thiệp */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 70px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Hình ảnh đại diện (Thay link ảnh thật vào đây) */
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ffd700;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px #ffd700;
+            animation: pulseAvatar 3s infinite;
+        }
+
+        @keyframes pulseAvatar {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #ff00cc, #333399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #dcdcdc;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffd700;
+            text-align: left;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .info-box strong {
+            color: #ffd700;
+        }
+
+        /* Nút bấm */
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #ff00cc, #333399);
+            color: white;
+            box-shadow: 0 0 20px #ff00cc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px #ff00cc;
+        }
+
+        /* Màn hình Cảm ơn (Ẩn lúc đầu) */
+        #thank-you-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            display: none; /* Ẩn */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .thank-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: #ffd700;
+            text-shadow: 0 0 30px #ff00cc;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .thank-message {
+            font-size: 1.5rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-top: 20px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(90deg, rgba(255,0,204,0.2), rgba(51,51,153,0.2));
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeIn 1s ease 0.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .interactive-element {
+            font-size: 3rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .interactive-element:active {
+            transform: scale(0.9);
+        }
+
+    </style>
 </head>
-
 <body>
 
-<canvas id="fx"></canvas>
-<div class="flash" id="flash"></div>
+    <div id="stars-container"></div>
 
-<div class="card">
-  <h1 id="title">🎓 KỶ YẾU THANH XUÂN 🎓</h1>
-  <p id="text">
-    Có những ngày bình thường,<br>
-    sau này nghĩ lại lại thấy rất đẹp.
-  </p>
-  <button onclick="join()">THAM GIA ✨</button>
-</div>
+    <div class="container" id="main-card">
+        <div class="card">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nghia&backgroundColor=b6e3f4" alt="Lương Đại Nghĩa" class="avatar">
+            
+            <h2>LỜI MỜI DỰ LỄ KỶ YẾU</h2>
+            <h1>Lương Đại Nghĩa</h1>
+            
+            <div class="info-box">
+                <p><strong>📅 Thời gian:</strong> 18/01/2026</p>
+                <p><strong>📍 Địa điểm:</strong> THPT Ninh Bình - Bạc Liêu</p>
+                <p><strong>✨ Sự kiện:</strong> Đánh dấu cột mốc trưởng thành!</p>
+            </div>
 
-<script>
-const memories=[
-{
- bg:"linear-gradient(120deg,#1d2671,#c33764)",
- title:"🎓 KỶ YẾU THANH XUÂN 🎓",
- text:"Có những ngày bình thường,<br>sau này nghĩ lại lại thấy rất đẹp."
-},
-{
- bg:"linear-gradient(120deg,#000428,#004e92)",
- title:"🌙 KÝ ỨC ĐÊM CUỐI 🌙",
- text:"Ánh đèn cuối ngày,<br>tiếng cười vẫn còn vang đâu đây."
-},
-{
- bg:"linear-gradient(120deg,#ff512f,#dd2476)",
- title:"🔥 TUỔI TRẺ BÙNG CHÁY 🔥",
- text:"Chúng ta đã từng rực rỡ,<br>và điều đó là thật."
-},
-{
- bg:"linear-gradient(120deg,#11998e,#38ef7d)",
- title:"🍃 MÙA HẠ CUỐI 🍃",
- text:"Thanh xuân trôi nhanh như gió,<br>chỉ ký ức là ở lại."
-}
-]
+            <p style="font-size: 0.9rem; font-style: italic; opacity: 0.8; margin-bottom: 20px;">
+                "Sự hiện diện của bạn là mảnh ghép hoàn hảo cho bức tranh thanh xuân của tớ!"
+            </p>
 
-let index=0
-const body=document.body
-const title=document.getElementById('title')
-const text=document.getElementById('text')
-const flash=document.getElementById('flash')
+            <div class="btn-group">
+                <button class="btn btn-yes" onclick="acceptInvite()">Đồng ý tham dự! 🚀</button>
+            </div>
+        </div>
+    </div>
 
-function changeMemory(){
-  index=(index+1)%memories.length
-  body.style.background=memories[index].bg
-  title.innerHTML=memories[index].title
-  text.innerHTML=memories[index].text
-  flash.classList.add('show')
-  setTimeout(()=>flash.classList.remove('show'),400)
-}
+    <div id="thank-you-screen">
+        <div class="thank-title">Cảm Ơn Bạn! ❤️</div>
+        <div class="thank-message" id="random-msg"></div>
+        <div style="margin-top: 30px; font-size: 1.2rem; color: #aaa;">(Chạm vào màn hình để bắn thêm pháo hoa!)</div>
+    </div>
 
-body.style.background=memories[0].bg
-document.addEventListener('click',e=>{
-  if(e.target.tagName!=="BUTTON") changeMemory()
-})
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-/* BLING BLING PARTICLE */
-const canvas=document.getElementById('fx')
-const ctx=canvas.getContext('2d')
-let w,h,particles=[]
-function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
-window.onresize=resize;resize()
+    <script>
+        // 1. TẠO NỀN SAO LẤP LÁNH (INTERACTIVE)
+        const starContainer = document.getElementById('stars-container');
+        const starCount = 150;
 
-class P{
- constructor(x,y){
-  this.x=x;this.y=y
-  this.vx=(Math.random()-.5)*6
-  this.vy=(Math.random()-.5)*6
-  this.life=60
-  this.color=`hsl(${Math.random()*360},100%,70%)`
- }
- draw(){
-  ctx.fillStyle=this.color
-  ctx.beginPath()
-  ctx.arc(this.x,this.y,2,0,Math.PI*2)
-  ctx.fill()
- }
- update(){
-  this.x+=this.vx
-  this.y+=this.vy
-  this.life--
- }
-}
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const xy = Math.random() * 100;
+            const duration = Math.random() * 2 + 1;
+            const size = Math.random() * 3;
+            
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDuration = `${duration}s`;
+            
+            starContainer.appendChild(star);
+        }
 
-document.addEventListener('click',e=>{
- for(let i=0;i<40;i++)particles.push(new P(e.clientX,e.clientY))
-})
+        // Tương tác chuột làm sao di chuyển (Parallax effect)
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            starContainer.style.transform = `translate(${x}px, ${y}px)`;
+        });
 
-function loop(){
- ctx.clearRect(0,0,w,h)
- particles=particles.filter(p=>p.life>0)
- particles.forEach(p=>{p.update();p.draw()})
- requestAnimationFrame(loop)
-}
-loop()
+        // 2. DANH SÁCH LỜI CẢM ƠN RANDOM
+        const thankYouMessages = [
+            "Bạn là một ngôi sao sáng trong ngày đặc biệt của Nghĩa! Hẹn gặp lại nhé! ✨",
+            "Yeah! Sự hiện diện của bạn sẽ làm sân trường Ninh Bình - Bạc Liêu bùng nổ! 🔥",
+            "Cảm ơn vì đã trở thành một phần thanh xuân rực rỡ của tớ. Hẹn 18/1 nhé! 💖",
+            "Tuyệt vời! Chuẩn bị quần áo thật đẹp để cùng check-in cháy máy nhé! 📸",
+            "Nghĩa rất vui vì bạn đã đồng ý! Hãy cùng tạo nên những kỷ niệm không thể quên! 🚀",
+            "Xác nhận thành công! Vé về miền ký ức thanh xuân đã được đặt tên bạn! 🎟️"
+        ];
 
-function join(){
- alert("💖 Cảm ơn bạn đã tham gia kỷ yếu 💖")
-}
-</script>
+        // 3. XỬ LÝ SỰ KIỆN "ĐỒNG Ý" (BÙNG NỔ)
+        function acceptInvite() {
+            // Ẩn thiệp
+            document.getElementById('main-card').style.transition = "all 0.5s";
+            document.getElementById('main-card').style.transform = "scale(0)";
+            document.getElementById('main-card').style.opacity = "0";
 
+            // Hiện màn hình cảm ơn sau 300ms
+            setTimeout(() => {
+                const screen = document.getElementById('thank-you-screen');
+                screen.style.display = 'flex';
+                
+                // Chọn lời chúc random
+                const randomText = thankYouMessages[Math.floor(Math.random() * thankYouMessages.length)];
+                document.getElementById('random-msg').innerText = randomText;
+
+                // CHẠY HIỆU ỨNG BÙNG NỔ
+                triggerExplosion();
+            }, 300);
+        }
+
+        // 4. HIỆU ỨNG PHÁO HOA/PHÁO GIẤY
+        function triggerExplosion() {
+            var duration = 3 * 1000; // Kéo dài 3 giây
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                
+                // Bắn từ 2 bên
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+
+            // Bắn một phát cực đại ở giữa
+            setTimeout(() => {
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#FFD700', '#FF00CC', '#00FFFF']
+                });
+            }, 500);
+        }
+
+        // Tương tác thêm: Bấm vào màn hình cảm ơn để bắn pháo hoa tiếp
+        document.getElementById('thank-you-screen').addEventListener('click', () => {
+             confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffffff', '#ff0000', '#00ff00', '#0000ff']
+            });
+        });
+
+    </script>
 </body>
 </html>
