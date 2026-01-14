@@ -3,369 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiệp Mời Tốt Nghiệp - Lương Đại Nghĩa</title>
+    <title>Lời Mời Kỷ Yếu - Lương Đại Nghĩa</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #aa8c2c;
+            --cream: #f9f7f2;
+            --deep-blue: #0a0a23;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            /* Giữ nền tối kỳ ảo bên ngoài */
-            background: radial-gradient(circle at center, #1a0b2e, #000000);
+            background-color: #000;
             height: 100vh;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            perspective: 1000px;
+            perspective: 1200px; /* Quan trọng cho hiệu ứng 3D */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* --- HIỆU ỨNG NỀN SAO (Kỳ ảo) --- */
-        #stars-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* --- 1. HỆ THỐNG NỀN SAO VŨ TRỤ (CHẠY XUYÊN SUỐT) --- */
+        #universe {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
+            background: radial-gradient(circle at center, #2b1055, #000000);
             pointer-events: none;
         }
-
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
-            opacity: 0.8;
-            animation: twinkle infinite alternate;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: var(--opacity);
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* --- 2. PHẦN INTRO 3D (MỞ ĐẦU) --- */
+        #intro-screen {
+            position: absolute;
+            z-index: 20;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.8s ease-in-out;
         }
 
-        @keyframes twinkle {
-            from { opacity: 0.2; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1.2); }
+        .intro-content {
+            text-align: center;
+            transform-style: preserve-3d; /* Cho phép các phần tử con 3D */
+            transition: transform 0.1s; /* Mượt mà khi di chuột */
+            cursor: pointer;
         }
 
-        /* --- THIẾT KẾ THIỆP GIẤY (Sang trọng theo mẫu ảnh) --- */
-        .paper-card {
+        .intro-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 6rem;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255, 215, 0, 0.8);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+        }
+
+        /* Tạo bóng 3D giả lập cho chữ */
+        .intro-title::before {
+            content: 'KỶ YẾU';
+            position: absolute;
+            top: 0; left: 0;
+            color: var(--gold);
+            opacity: 0.5;
+            transform: translateZ(-30px);
+            filter: blur(5px);
+        }
+
+        .intro-year {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            color: #fff;
+            margin-top: -20px;
+            letter-spacing: 20px;
+            text-shadow: 0 0 20px var(--gold);
+            transform: translateZ(50px); /* Nổi lên trước */
+        }
+
+        .tap-hint {
+            margin-top: 50px;
+            color: #fff;
+            font-size: 1rem;
+            opacity: 0.7;
+            animation: pulse 1.5s infinite;
+            letter-spacing: 3px;
+        }
+
+        @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+
+
+        /* --- 3. PHẦN THIỆP MỜI (CARD GIẤY CỔ ĐIỂN) --- */
+        #invitation-card {
             position: relative;
             z-index: 10;
-            /* Màu nền giấy kem và vân giấy giả lập */
-            background-color: #f8f5e6;
-            background-image: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(240,230,200,0.5));
-            padding: 50px 40px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,215,0,0.2);
-            max-width: 500px;
+            background: var(--cream);
+            /* Texture giấy */
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png'); 
             width: 90%;
-            /* Hiệu ứng viền cổ điển */
-            border: 2px solid #d4af37; /* Màu vàng kim tối */
-            border-radius: 8px;
-            color: #333; /* Màu chữ tối */
+            max-width: 480px;
+            padding: 40px;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             
-            transform: translateY(50px);
+            /* Ban đầu ẩn đi */
             opacity: 0;
-            animation: slideUpCard 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            transition: all 0.6s ease-in-out;
+            transform: translateY(100px) scale(0.8) rotateX(20deg);
+            pointer-events: none;
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+            
+            /* Viền trang trí */
+            border: 1px solid #d4af37;
+            outline: 3px double #d4af37;
+            outline-offset: -10px;
         }
 
-        @keyframes slideUpCard {
-            to { transform: translateY(0); opacity: 1; }
+        /* Khi class .active được thêm vào thì hiện thiệp */
+        #invitation-card.active {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0);
+            pointer-events: auto;
         }
 
-        /* Typography theo phong cách ảnh mẫu */
-        .ornament {
-            color: #d4af37;
-            font-size: 1.5rem;
+        .card-header {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            color: #666;
             margin-bottom: 10px;
         }
 
-        .top-text {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 5px;
-            font-family: 'Cinzel Decorative', serif;
-        }
-
-        h1.main-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 3rem;
+        .card-title {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5rem;
             color: #222;
-            line-height: 1.1;
-            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 5px;
         }
 
-        .script-party {
+        .card-subtitle {
             font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: #d4af37; /* Màu vàng kim cho chữ Party */
-            margin-top: -15px;
+            font-size: 3rem;
+            color: var(--dark-gold);
+            margin-top: -10px;
             margin-bottom: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        .grad-illustration {
-            width: 120px;
-            margin: 10px auto 25px;
+        /* Hình ảnh Mũ cử nhân */
+        .grad-cap-img {
+            width: 140px;
+            margin: 0 auto 15px;
             display: block;
-            /* Sử dụng filter để đổi màu ảnh SVG sang tông vàng/đen cho hợp */
-            filter: sepia(100%) hue-rotate(5deg) saturate(90%) brightness(80%);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            animation: floatCap 3s ease-in-out infinite;
         }
 
-        .student-name {
-            font-family: 'Cinzel Decorative', serif;
+        @keyframes floatCap { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .divider {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .name-highlight {
+            font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
+            font-weight: 700;
             color: #000;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin: 15px 0;
         }
 
-        .class-of {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            color: #333;
-            letter-spacing: 3px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #d4af37;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-
-        .details-block p {
-            font-size: 1.1rem;
-            margin: 8px 0;
-            font-weight: 600;
-            color: #444;
-        }
-        .details-block .school-name {
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .details {
             font-size: 1rem;
-            margin-top: 15px;
-            color: #666;
+            color: #444;
+            line-height: 1.6;
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
         }
 
-        /* Nút bấm phong cách mới */
-        .btn-gold {
-            margin-top: 30px;
-            padding: 15px 40px;
-            font-size: 1.1rem;
+        .btn-agree {
+            background: linear-gradient(135deg, #d4af37, #fceabb);
             border: none;
-            /* Gradient vàng kim sang trọng */
-            background: linear-gradient(45deg, #d4af37, #fceabb, #d4af37);
-            color: #222;
+            padding: 12px 35px;
             font-family: 'Cinzel Decorative', serif;
             font-weight: bold;
+            font-size: 1rem;
+            color: #222;
             cursor: pointer;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        .btn-gold:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
-        }
-
-        .btn-gold::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(transparent, rgba(255,255,255,0.6), transparent);
-            transform: rotate(45deg);
-            animation: shineGold 2.5s infinite;
-        }
-
-        @keyframes shineGold {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
+        .btn-agree:active { transform: scale(0.95); }
+        .btn-agree:hover { box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6); transform: translateY(-2px); }
 
 
-        /* --- MÀN HÌNH CẢM ƠN (Bùng nổ - Giữ nguyên từ code trước) --- */
-        #thank-you-screen {
+        /* --- 4. PHẦN CẢM ƠN & ENDING (BÙNG NỔ) --- */
+        #thank-you-layer {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95); /* Nền tối hơn để nổi bật pháo hoa */
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 100;
-            display: none; /* Ẩn lúc đầu */
+            background: rgba(0,0,0,0.92);
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: #fff;
+            color: white;
         }
 
-        .thank-title {
+        /* Ảnh động GIF 3D */
+        .funny-gif {
+            width: 200px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
+            animation: bounceIn 1s;
+        }
+
+        .ty-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 5rem;
-            color: #ffd700;
-            text-shadow: 0 0 30px #ff00cc;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 4.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px #ff00de;
         }
 
-        .thank-message {
-            font-size: 1.5rem;
+        .ty-msg {
+            font-size: 1.2rem;
             max-width: 600px;
-            line-height: 1.6;
             margin-top: 20px;
             padding: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
             border-radius: 15px;
-            /* Hiệu ứng neon cho hộp thoại cảm ơn */
-            background: linear-gradient(90deg, rgba(255,0,204,0.3), rgba(51,51,153,0.3));
-            border: 1px solid rgba(255,255,255,0.5);
-            backdrop-filter: blur(10px);
-            animation: fadeIn 1s ease 0.5s forwards;
-            opacity: 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 1s forwards;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
+        /* Nút replay nhỏ */
+        .replay-hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
         }
-        @keyframes fadeIn {
-            to { opacity: 1; }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); } 60% { transform: scale(1.1); } 100% { transform: scale(1); }
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
-    <div id="stars-container"></div>
+    <div id="universe"></div>
 
-    <div class="paper-card" id="main-card">
-        <div class="ornament">⚜️ 🌿 ⚜️</div>
-        <p class="top-text">Bạn được trân trọng kính mời tới</p>
-        <h1 class="main-title">Graduation</h1>
-        <p class="script-party">Party</p>
-        
-        <img src="https://cdn-icons-png.flaticon.com/512/2936/2936793.png" alt="Graduation Cap" class="grad-illustration">
-
-        <h2 class="student-name">Lương Đại Nghĩa</h2>
-        <h3 class="class-of">CLASS OF 2026</h3>
-
-        <div class="details-block">
-            <p>18 . Tháng 1 . 2026</p>
-            <p style="color: #d4af37; font-size: 1.3rem;">🕘 10:00 - 11:30</p>
-            <p class="school-name">THPT Ninh Bình - Bạc Liêu</p>
+    <div id="intro-screen" onclick="enterInvitation()">
+        <div class="intro-content" id="intro-text">
+            <div class="intro-title">KỶ YẾU</div>
+            <div class="intro-year">2026</div>
         </div>
-
-        <button class="btn-gold" onclick="acceptInvite()">Đồng ý tham dự ✨</button>
+        <div class="tap-hint">--- CHẠM ĐỂ MỞ THIỆP ---</div>
     </div>
 
-    <div id="thank-you-screen">
-        <div class="thank-title">Tuyệt Vời Quá! ❤️</div>
-        <div class="thank-message" id="random-msg"></div>
-        <div style="margin-top: 30px; font-size: 1.2rem; color: #aaa; font-style: italic;">(Chạm vào màn hình để bắn thêm pháo hoa chúc mừng Nghĩa nhé!)</div>
+    <div id="invitation-card">
+        <div class="card-header">You Are Invited To</div>
+        <h1 class="card-title">Graduation</h1>
+        <h2 class="card-subtitle">Party</h2>
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/3079/3079100.png" alt="Graduation Cap" class="grad-cap-img">
+
+        <div class="divider">♦ &nbsp; CLASS OF 2026 &nbsp; ♦</div>
+
+        <div class="name-highlight">Lương Đại Nghĩa</div>
+
+        <div class="details">
+            <p><strong>📅 THỜI GIAN</strong><br>18/01/2026</p>
+            <p style="margin: 10px 0; color: #b8860b;">🕒 10:00 - 11:30</p>
+            <p><strong>📍 ĐỊA ĐIỂM</strong><br>THPT Ninh Bình - Bạc Liêu</p>
+        </div>
+
+        <button class="btn-agree" onclick="acceptInvite()">ĐỒNG Ý THAM DỰ ✨</button>
+    </div>
+
+    <div id="thank-you-layer">
+        <img src="https://media3.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif?cid=ecf05e47c9z0b3l3y5k5q4j6h7l8m9n0p1q2r3s4t5u6v7w8&rid=giphy.gif" class="funny-gif" alt="Party Time">
+        
+        <h1 class="ty-title">Thank You!</h1>
+        <div class="ty-msg" id="ty-text"></div>
+        <div class="replay-hint" onclick="location.reload()">Xem lại từ đầu</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
-        // --- 1. HIỆU ỨNG NỀN SAO BAY BAY (GIỮ NGUYÊN) ---
-        const starContainer = document.getElementById('stars-container');
-        const starCount = 150;
-        for (let i = 0; i < starCount; i++) {
+        // --- A. XỬ LÝ HIỆU ỨNG SAO ---
+        const universe = document.getElementById('universe');
+        for(let i=0; i<100; i++){
             const star = document.createElement('div');
             star.classList.add('star');
             const size = Math.random() * 3;
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.animationDuration = `${Math.random() * 2 + 1}s`;
-            starContainer.appendChild(star);
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random()*3 + 1)+'s');
+            star.style.setProperty('--opacity', Math.random());
+            universe.appendChild(star);
         }
+
+        // --- B. XỬ LÝ INTRO 3D (NGHIÊNG THEO CHUỘT) ---
+        const introScreen = document.getElementById('intro-screen');
+        const introText = document.getElementById('intro-text');
+        
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth - e.pageX * 2) / 100;
-            const y = (window.innerHeight - e.pageY * 2) / 100;
-            starContainer.style.transform = `translate(${x}px, ${y}px)`;
+            if(introScreen.style.display === 'none') return;
+            
+            const x = (window.innerWidth / 2 - e.pageX) / 25;
+            const y = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            // Xoay chữ theo vị trí chuột
+            introText.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
         });
 
-        // --- 2. DANH SÁCH LỜI CẢM ƠN (GIỮ NGUYÊN HOẶC THÊM MỚI) ---
-        const thankYouMessages = [
-            "Yeah! Sự hiện diện của bạn sẽ làm cho buổi lễ của Nghĩa thêm phần rực rỡ! Hẹn gặp lúc 10h nha! 🔥",
-            "Cảm ơn bạn đã nhận lời! Cùng Nghĩa lưu giữ những khoảnh khắc đẹp nhất tại THPT Ninh Bình - Bạc Liêu nhé! 💖",
-            "Tuyệt vời! Hãy chuẩn bị tinh thần để 'quẩy' hết mình và check-in cháy máy từ 10h00 - 11h30 nhé! 📸",
-            "Nghĩa rất vui vì bạn sẽ đến! Đây chắc chắn sẽ là một kỷ niệm thanh xuân không thể quên! 🚀",
-            "Xác nhận thành công! Vé về miền ký ức thanh xuân rực rỡ đã được đặt tên bạn! Hẹn gặp lại! 🎟️"
-        ];
-
-        // --- 3. XỬ LÝ SỰ KIỆN "ĐỒNG Ý" (BÙNG NỔ KỲ ẢO) ---
-        function acceptInvite() {
-            const mainCard = document.getElementById('main-card');
+        // --- C. CHUYỂN CẢNH: INTRO -> THIỆP ---
+        function enterInvitation() {
+            // 1. Chữ bay mất
+            introText.style.transform = "scale(5) rotateZ(10deg)";
+            introText.style.opacity = "0";
             
-            // Hiệu ứng biến mất của tấm thiệp giấy: Bay lên và mờ dần
-            mainCard.style.transform = "translateY(-100vh) scale(0.8) rotate(5deg)";
-            mainCard.style.opacity = "0";
-
-            // Hiện màn hình cảm ơn sau khi thiệp biến mất
+            // 2. Ẩn màn hình intro sau 0.5s
             setTimeout(() => {
-                const screen = document.getElementById('thank-you-screen');
-                screen.style.display = 'flex'; // Hiện màn hình tối
+                introScreen.style.display = 'none';
+                // 3. Hiện thiệp
+                document.getElementById('invitation-card').classList.add('active');
                 
-                // Chọn lời chúc random
-                const randomText = thankYouMessages[Math.floor(Math.random() * thankYouMessages.length)];
-                document.getElementById('random-msg').innerText = randomText;
-
-                // KÍCH HOẠT PHÁO HOA BÙNG NỔ
-                triggerExplosion();
-            }, 600); // Thời gian chờ khớp với transition CSS
-        }
-
-        // --- 4. HIỆU ỨNG PHÁO HOA (GIỮ NGUYÊN ĐỘ HOÀNH TRÁNG) ---
-        function triggerExplosion() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
-
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) { return clearInterval(interval); }
-                var particleCount = 50 * (timeLeft / duration);
-                // Bắn pháo giấy nhiều màu sắc rực rỡ để đối lập với thiệp giấy
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                    colors: ['#FFD700', '#FF00CC', '#00FFFF', '#ffffff']
-                }));
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                    colors: ['#FFD700', '#FF00CC', '#00FFFF', '#ffffff']
-                }));
-            }, 250);
-
-            setTimeout(() => {
-                confetti({
-                    particleCount: 250, spread: 120, origin: { y: 0.6 },
-                    colors: ['#FFD700', '#ffffff', '#FF4500']
-                });
+                // Bắn nhẹ pháo giấy chào mừng
+                confetti({ particleCount: 50, spread: 70, origin: { y: 0.8 } });
             }, 500);
         }
 
-        // Tương tác thêm: Bấm vào màn hình cảm ơn để bắn tiếp
-        document.getElementById('thank-you-screen').addEventListener('click', () => {
-             confetti({ particleCount: 120, spread: 100, origin: { y: 0.7 }, zIndex: 200 });
+        // --- D. CHUYỂN CẢNH: ĐỒNG Ý -> BÙNG NỔ ---
+        const messages = [
+            "Tuyệt vời! Bạn đã chốt kèo 10h sáng ngày 18/1 nhé! Đừng bùng nha! 😎",
+            "Yeah! Lên đồ lộng lẫy và chuẩn bị check-in cháy máy tại Ninh Bình - Bạc Liêu nào! 📸",
+            "Xác nhận thành công! Lương Đại Nghĩa rất mong chờ sự hiện diện của bạn! ❤️",
+            "Okila! Một vé trở về thanh xuân đã được đặt tên bạn. Hẹn gặp lại nhé! 🚀"
+        ];
+
+        function acceptInvite() {
+            const card = document.getElementById('invitation-card');
+            
+            // 1. Thiệp bay vút lên trời
+            card.style.transition = "all 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045)";
+            card.style.transform = "translateY(-1000px) rotate(-20deg)";
+            card.style.opacity = "0";
+
+            // 2. Hiện màn hình cảm ơn
+            setTimeout(() => {
+                const tyLayer = document.getElementById('thank-you-layer');
+                tyLayer.style.display = 'flex';
+                
+                // Random lời chúc
+                document.getElementById('ty-text').innerText = messages[Math.floor(Math.random() * messages.length)];
+                
+                // 3. KÍCH HOẠT ĐẠI TIỆC PHÁO HOA
+                bigExplosion();
+
+            }, 600);
+        }
+
+        function bigExplosion() {
+            var duration = 4 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                var particleCount = 50 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+        
+        // Tương tác chạm vào màn hình cảm ơn để bắn thêm
+        document.getElementById('thank-you-layer').addEventListener('click', () => {
+             confetti({ particleCount: 100, spread: 100, origin: { y: 0.6 }, colors: ['#FFD700', '#FFF'] });
         });
 
     </script>
